@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/tabs.dart';
 
 void main() {
-  runApp(Tabs());
+  runApp(const MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const Tabs(),
     );
   }
 }
