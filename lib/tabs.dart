@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/colecciones.dart';
 import 'package:flutter_application_2/principal.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -54,11 +55,11 @@ class _TabsState extends State<Tabs> {
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed, // Evita que los iconos se oculten en 5+ elementos
         items: [
-          const BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Principal"),
+          const BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: "Principal"),
           const BottomNavigationBarItem(icon: Icon(Icons.location_on_rounded), label: "Ubicaciones"),
           const BottomNavigationBarItem(icon: Icon(Icons.image_rounded), label: "Colecciones"),
-          BottomNavigationBarItem(icon: SvgPicture.asset(imgBunker, width: 24, height: 24), label: "Refugio"),
-          BottomNavigationBarItem(icon: SvgPicture.asset(imgCastillo, width: 24, height: 24), label: "Castillo"),
+          BottomNavigationBarItem(icon: SvgPicture.asset(imgBunker, width: 30, height: 30), label: "Refugio"),
+          BottomNavigationBarItem(icon: SvgPicture.asset(imgCastillo, width: 30, height: 30), label: "Castillo"),
           const BottomNavigationBarItem(icon: Icon(Icons.panorama_photosphere_rounded), label: "360"),
         ],
       ),
@@ -73,7 +74,7 @@ class _TabsState extends State<Tabs> {
       case 1:
         return const Center(child: Icon(Icons.location_on_rounded, size: 50));
       case 2:
-        return const Center(child: Icon(Icons.image_rounded, size: 50));
+        return Colecciones();
       case 3:
         return const Center(child: Text("Bunker", style: TextStyle(fontSize: 24)));
       case 4:
