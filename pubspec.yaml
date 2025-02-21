@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   flutter_svg: ^2.0.17
   audioplayers: ^6.2.0
+  flutter_map: ^8.0.0
+  latlong2: ^0.9.1
 
 dev_dependencies:
   flutter_test:

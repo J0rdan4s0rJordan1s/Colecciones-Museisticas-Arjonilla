@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class Colecciones extends StatefulWidget {
   Colecciones({super.key});
@@ -261,55 +263,172 @@ class DetailPage extends StatefulWidget {
   });
 
   @override
-  _DetailScreenState createState() => _DetailScreenState();
+  _DetailPageState createState() => _DetailPageState();
 }
 
-class _DetailScreenState extends State<DetailPage> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  bool _isPlaying = false; // Estado del audio
+class _DetailPageState extends State<DetailPage> {
+  late AudioPlayer _audioPlayer;
+  Duration _duration = Duration.zero;
+  Duration _position = Duration.zero;
+  bool isPlaying = false;
 
-  void _toggleAudio() async {
-    if (_isPlaying) {
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer = AudioPlayer();
+    _audioPlayer.onDurationChanged.listen((d) {
+      setState(() {
+        _duration = d;
+      });
+    });
+    _audioPlayer.onPositionChanged.listen((p) {
+      setState(() {
+        _position = p;
+      });
+    });
+    _audioPlayer.onPlayerComplete.listen((event) {
+      setState(() {
+        isPlaying = false;
+        _position = Duration.zero;
+      });
+    });
+  }
+
+  void _playPause() async {
+    if (isPlaying) {
       await _audioPlayer.pause();
     } else {
-      await _audioPlayer.play(AssetSource(widget.audioPath)); // Usar AssetSource para audio local
+      await _audioPlayer.play(AssetSource(widget.audioPath));
     }
-
     setState(() {
-      _isPlaying = !_isPlaying; // Cambiar estado
+      isPlaying = !isPlaying;
     });
   }
 
   @override
   void dispose() {
-    _audioPlayer.stop(); // Detener audio cuando la pantalla se cierra
-    _audioPlayer.dispose(); // Liberar recursos cuando la pantalla se cierra
+    _audioPlayer.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body: Column(
-        children: [
-          Image.asset(widget.imagePath, width: double.infinity, height: 250, fit: BoxFit.cover),
-          const SizedBox(height: 20),
-          IconButton(
-            icon: Icon(_isPlaying ? Icons.pause_circle_filled : Icons.play_circle_filled),
-            iconSize: 64,
-            onPressed: _toggleAudio,
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              widget.descripcion,
-              style: const TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                Image.asset(widget.imagePath, width: double.infinity, height: 200, fit: BoxFit.cover),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  color: Colors.black,
+                  alignment: Alignment.center,
+                  child: Text(
+                    widget.title,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 16,
+                  top: 25,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back, color: Color(0xffd6a469)),
+                    onPressed: () {
+                      _audioPlayer.stop();
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+            Container(
+              color: Color(0xff15181e),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                children: [
+                  Slider(
+                    activeColor: Colors.white,
+                    inactiveColor: Colors.grey,
+                    min: 0,
+                    max: _duration.inSeconds.toDouble(),
+                    value: _position.inSeconds.toDouble(),
+                    onChanged: (value) async {
+                      await _audioPlayer.seek(Duration(seconds: value.toInt()));
+                    },
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${_position.inMinutes.toString().padLeft(2, '0')}:${(_position.inSeconds % 60).toString().padLeft(2, '0')}",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        "${_duration.inMinutes.toString().padLeft(2, '0')}:${(_duration.inSeconds % 60).toString().padLeft(2, '0')}",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow, color: Colors.white, size: 40),
+                    onPressed: _playPause,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                color: Color(0xff15181e),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.descripcion,
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                      SizedBox(height: 20), // Espacio entre la descripción y el mapa
+                      Container(
+                        height: 300, // Altura del mapa
+                        child: FlutterMap(
+                          options: MapOptions(
+                            center: LatLng(37.97341644326388, -4.104582139944653), // Reemplaza con tus coordenadas
+                            zoom: 13.0,
+                          ),
+                          layers: [
+                            TileLayerOptions(
+                              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                              subdomains: ['a', 'b', 'c'],
+                            ),
+                            MarkerLayerOptions(
+                              markers: [
+                                Marker(
+                                  point: LatLng(37.97341644326388, -4.104582139944653), // Reemplaza con tus coordenadas
+                                  builder: (context) => Icon(
+                                    Icons.location_pin,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
