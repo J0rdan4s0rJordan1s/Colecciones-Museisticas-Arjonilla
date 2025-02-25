@@ -321,11 +321,22 @@ class _DetailPageState extends State<DetailPage> {
           children: [
             Stack(
               children: [
-                Image.asset(widget.imagePath, width: double.infinity, height: 200, fit: BoxFit.cover),
+                Image.asset(
+                  widget.imagePath,
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
                 Container(
                   width: double.infinity,
                   height: 50,
-                  color: Colors.black,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.black54, Colors.transparent],
+                    ),
+                  ),
                   alignment: Alignment.center,
                   child: Text(
                     widget.title,
@@ -338,7 +349,7 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 Positioned(
                   left: 16,
-                  top: 25,
+                  top: 10,
                   child: IconButton(
                     icon: Icon(Icons.arrow_back, color: Color(0xffd6a469)),
                     onPressed: () {
@@ -351,18 +362,25 @@ class _DetailPageState extends State<DetailPage> {
             ),
             Container(
               color: Color(0xff15181e),
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
               child: Column(
                 children: [
-                  Slider(
-                    activeColor: Colors.white,
-                    inactiveColor: Colors.grey,
-                    min: 0,
-                    max: _duration.inSeconds.toDouble(),
-                    value: _position.inSeconds.toDouble(),
-                    onChanged: (value) async {
-                      await _audioPlayer.seek(Duration(seconds: value.toInt()));
-                    },
+                  SliderTheme(
+                    data: SliderThemeData(
+                      trackHeight: 3,
+                      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
+                      overlayShape: RoundSliderOverlayShape(overlayRadius: 10),
+                    ),
+                    child: Slider(
+                      activeColor: Colors.white,
+                      inactiveColor: Colors.grey,
+                      min: 0,
+                      max: _duration.inSeconds.toDouble(),
+                      value: _position.inSeconds.toDouble(),
+                      onChanged: (value) async {
+                        await _audioPlayer.seek(Duration(seconds: value.toInt()));
+                      },
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -378,7 +396,8 @@ class _DetailPageState extends State<DetailPage> {
                     ],
                   ),
                   IconButton(
-                    icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow, color: Colors.white, size: 40),
+                    icon: Icon(isPlaying ? Icons.pause_circle_filled : Icons.play_circle_fill,
+                        color: Colors.white, size: 50),
                     onPressed: _playPause,
                   ),
                 ],
@@ -390,36 +409,46 @@ class _DetailPageState extends State<DetailPage> {
                 child: SingleChildScrollView(
                   padding: EdgeInsets.all(8.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         widget.descripcion,
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
-                      SizedBox(height: 20), // Espacio entre la descripción y el mapa
-                      Container(
-                        height: 300, // Altura del mapa
-                        child: FlutterMap(
-                          options: MapOptions(
-                            center: LatLng(37.97341644326388, -4.104582139944653), // Reemplaza con tus coordenadas
-                            zoom: 13.0,
+                      SizedBox(height: 20),
+                      if (widget.title == "Introducción")
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white30),
                           ),
-                          layers: [
-                            TileLayerOptions(
-                              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                              subdomains: ['a', 'b', 'c'],
+                          child: FlutterMap(
+                            options: MapOptions(
+                              initialCenter: LatLng(37.973682426664574, -4.104577225813943),
+                              initialZoom: 17.0,
                             ),
-                            MarkerLayerOptions(
-                              markers: [
-                                Marker(
-                                  point: LatLng(37.97341644326388, -4.104582139944653), // Reemplaza con tus coordenadas
-                                  builder: (context) => Icon(
-                                    Icons.location_pin,
-                                    color: Colors.red,
+                            children: [
+                              TileLayer(
+                                urlTemplate:
+                                    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                                    retinaMode: true,
+                              ),
+                              MarkerLayer(
+                                markers: [
+                                  Marker(
+                                    point: LatLng(37.973682426664574, -4.104577225813943),
+                                    width: 30,
+                                    height: 30,
+                                    child: Icon(
+                                      Icons.location_on, color: Colors.red,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

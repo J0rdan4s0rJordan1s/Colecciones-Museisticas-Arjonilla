@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/castillo.dart';
 import 'package:flutter_application_2/colecciones.dart';
 import 'package:flutter_application_2/principal.dart';
+import 'package:flutter_application_2/refugio.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
@@ -76,9 +78,9 @@ class _TabsState extends State<Tabs> {
       case 2:
         return Colecciones();
       case 3:
-        return const Center(child: Text("Bunker", style: TextStyle(fontSize: 24)));
+        return Refugio();
       case 4:
-        return const Center(child: Text("Castillo", style: TextStyle(fontSize: 24)));
+        return Castillo();
       case 5:
         return const Center(child: Icon(Icons.panorama_photosphere_rounded, size: 50));
       default:

@@ -25,5 +25,7 @@ flutter:
       - assets/images/
       - assets/images/colecciones/
       - assets/audios/colecciones/
-
-  
+      - assets/images/refugio/
+      - assets/audios/refugio/
+      - assets/images/castillo/
+      - assets/audios/castillo/
