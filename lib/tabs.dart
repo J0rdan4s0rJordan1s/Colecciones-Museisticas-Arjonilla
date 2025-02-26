@@ -3,7 +3,9 @@ import 'package:flutter_application_2/castillo.dart';
 import 'package:flutter_application_2/colecciones.dart';
 import 'package:flutter_application_2/principal.dart';
 import 'package:flutter_application_2/refugio.dart';
+import 'package:flutter_application_2/webview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_application_2/mapa.dart';
 
 void main() {
   runApp(const MyApp());
@@ -74,7 +76,7 @@ class _TabsState extends State<Tabs> {
       case 0:
         return const Principal();
       case 1:
-        return const Center(child: Icon(Icons.location_on_rounded, size: 50));
+        return Mapa();
       case 2:
         return Colecciones();
       case 3:
@@ -82,7 +84,7 @@ class _TabsState extends State<Tabs> {
       case 4:
         return Castillo();
       case 5:
-        return const Center(child: Icon(Icons.panorama_photosphere_rounded, size: 50));
+        return WebViewPage(url: "https://360.amuraone.com/virtualtour/5f1f3688");
       default:
       return const Center();
     }
