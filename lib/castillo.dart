@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-
+import 'dart:io';
 class Castillo extends StatefulWidget {
   Castillo({super.key});
 
@@ -169,6 +169,16 @@ class Castillo extends StatefulWidget {
   }
 }
 
+bool isMobile() {
+    try {
+      Platform.operatingSystem;
+      return true;
+    }
+    catch (e) {
+      return false;
+    }
+  }
+
 class GuideCard extends StatelessWidget {
   final String title;
   final String imagePath;
@@ -177,7 +187,6 @@ class GuideCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool web = MediaQuery.of(context).size.width > 600;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ClipRRect(
@@ -188,12 +197,12 @@ class GuideCard extends StatelessWidget {
             Image.asset(
               imagePath,
               width: double.infinity,
-              height: web ? 300 : 150,
+              height: isMobile() ? 150 : 300,
               fit: BoxFit.cover,
             ),
             Container(
               width: double.infinity,
-              height: web ? 300 : 150,
+              height: isMobile() ? 150 : 300,
               color: const Color.fromRGBO(0, 0, 0, 0.5),
               alignment: Alignment.center,
               child: Text(
@@ -278,7 +287,6 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool web = MediaQuery.of(context).size.width > 600;
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -290,7 +298,7 @@ class _DetailPageState extends State<DetailPage> {
                 Image.asset(
                   widget.imagePath,
                   width: double.infinity,
-                  height: web ? 300 : 200,
+                  height: isMobile() ? 200 : 300,
                   fit: BoxFit.cover,
                 ),
                 Container(
