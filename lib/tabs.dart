@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/castillo.dart';
 import 'package:flutter_application_2/colecciones.dart';
+import 'package:flutter_application_2/iframe.dart';
 import 'package:flutter_application_2/principal.dart';
 import 'package:flutter_application_2/refugio.dart';
 import 'package:flutter_application_2/webview.dart';
@@ -72,6 +73,7 @@ class _TabsState extends State<Tabs> {
 
   // Función que devuelve la pantalla según la pestaña seleccionada
   Widget _getScreen(int index) {
+    bool web = MediaQuery.of(context).size.width > 600;
     switch (index) {
       case 0:
         return const Principal();
@@ -84,7 +86,7 @@ class _TabsState extends State<Tabs> {
       case 4:
         return Castillo();
       case 5:
-        return WebViewPage(url: "https://360.amuraone.com/virtualtour/5f1f3688");
+        return web ? PantallaCompletaIframe(url: "https://360.amuraone.com/virtualtour/5f1f3688") :  WebViewPage(url: "https://360.amuraone.com/virtualtour/5f1f3688");
       default:
       return const Center();
     }

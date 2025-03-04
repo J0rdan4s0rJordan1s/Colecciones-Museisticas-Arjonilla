@@ -153,6 +153,7 @@ class GuideCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool web = MediaQuery.of(context).size.width > 600;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ClipRRect(
@@ -163,12 +164,12 @@ class GuideCard extends StatelessWidget {
             Image.asset(
               imagePath,
               width: double.infinity,
-              height: 150,
+              height: web ? 300 : 150,
               fit: BoxFit.cover,
             ),
             Container(
               width: double.infinity,
-              height: 150,
+              height: web ? 300 : 150,
               color: const Color.fromRGBO(0, 0, 0, 0.5),
               alignment: Alignment.center,
               child: Text(

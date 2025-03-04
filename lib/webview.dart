@@ -8,6 +8,7 @@ class WebViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WebViewPlatform.instance != null;
     return Scaffold(
       appBar: AppBar(
         title: Text("360", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),

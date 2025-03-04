@@ -71,6 +71,10 @@ class _MapaState extends State<Mapa> {
     );
   }
 
+  void _volverAlCentro() {
+    _mapController.move(LatLng(37.97391, -4.10463), 20.0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -172,6 +176,16 @@ class _MapaState extends State<Mapa> {
               onPressed: _getCurrentLocation,
               backgroundColor: Colors.white,
               child: Icon(Icons.near_me_rounded, color: Color(0xffd6a469)),
+            ),
+          ),
+          Positioned(
+            bottom: 80,
+            left: 20,
+            child: FloatingActionButton(
+              heroTag: "volver_centro",
+              onPressed: _volverAlCentro,
+              backgroundColor: Colors.white,
+              child: Icon(Icons.my_location, color: Color(0xffd6a469)),
             ),
           ),
         ],
