@@ -313,6 +313,7 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool web = MediaQuery.of(context).size.width > 800;
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -324,7 +325,7 @@ class _DetailPageState extends State<DetailPage> {
                 Image.asset(
                   widget.imagePath,
                   width: double.infinity,
-                  height: 200,
+                  height: web ? 300 : 200,
                   fit: BoxFit.cover,
                 ),
                 Container(

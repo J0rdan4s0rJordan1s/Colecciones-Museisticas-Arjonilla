@@ -111,7 +111,7 @@ class Castillo extends StatefulWidget {
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'AUDIOGUÍAS castillo',
+            'AUDIOGUÍAS CASTILLO',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ),
