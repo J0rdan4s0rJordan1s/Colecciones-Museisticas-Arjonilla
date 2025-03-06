@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/castillo.dart';
 import 'package:flutter_application_2/colecciones.dart';
+import 'package:flutter_application_2/iframe.dart';
 import 'package:flutter_application_2/principal.dart';
 import 'package:flutter_application_2/refugio.dart';
-import 'package:flutter_application_2/webview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_application_2/mapa.dart';
 import 'dart:io';
-import 'package:flutter_application_2/iframe.dart' deferred as web_views;
 
 void main() {
   runApp(const MyApp());
@@ -96,20 +95,7 @@ class _TabsState extends State<Tabs> {
       case 4:
         return Castillo();
       case 5:
-        if (isMobile()) {
-                return WebViewPage(url: "https://360.amuraone.com/virtualtour/5f1f3688");
-            } else {
-                return FutureBuilder(
-                    future: web_views.loadLibrary(),
-                    builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                            return web_views.PantallaCompletaIframe(url: "https://360.amuraone.com/virtualtour/5f1f3688");
-                        } else {
-                            return const CircularProgressIndicator();
-                        }
-                    },
-                );
-            }
+        return WebAppView(url: 'https://360.amuraone.com/virtualtour/5f1f3688');
       default:
       return const Center();
     }

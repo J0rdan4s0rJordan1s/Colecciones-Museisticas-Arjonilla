@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:web/web.dart' as web;
 import 'dart:ui' as ui;
 
-class WebViewWeb extends StatelessWidget {
+class IframeWidget extends StatelessWidget {
   final String url;
   final double width;
   final double height;
 
-  const WebViewWeb({required this.url, required this.width, required this.height});
+  const IframeWidget({required this.url, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {
     String htmlId = "flutter_webview_$url";
-
+  
     // Registra la vista HTML
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(htmlId, (int viewId) {
       final iframe = web.document.createElement('iframe') as web.HTMLIFrameElement;
       iframe.src = url;
       iframe.style.border = 'none';
-      iframe.style.width = '${width}px';
-      iframe.style.height = '${height}px';
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
       return iframe;
     });
 
@@ -33,17 +33,22 @@ class WebViewWeb extends StatelessWidget {
   }
 }
 
-class PantallaCompletaIframe extends StatelessWidget {
+class WebAppView extends StatelessWidget {
   final String url;
 
-  const PantallaCompletaIframe({required this.url});
+  const WebAppView({required this.url});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("360", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        backgroundColor: Colors.black,
+        centerTitle: true,
+        ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return WebViewWeb(
+          return IframeWidget(
             url: url,
             width: constraints.maxWidth,
             height: constraints.maxHeight,
@@ -52,10 +57,4 @@ class PantallaCompletaIframe extends StatelessWidget {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: PantallaCompletaIframe(url: 'https://360.amuraone.com/virtualtour/5f1f3688'),
-  ));
 }

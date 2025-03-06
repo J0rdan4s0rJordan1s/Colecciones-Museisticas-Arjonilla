@@ -79,7 +79,7 @@ class _MapaState extends State<Mapa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ubicaciones", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        title: Text("UBICACIONES", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: Colors.black,
         centerTitle: true,
       ),
@@ -156,7 +156,7 @@ class _MapaState extends State<Mapa> {
               ),
             ),
           Positioned(
-            bottom: 80,
+            bottom: 85,
             right: 20,
             child: FloatingActionButton(
               heroTag: "menu_button",
@@ -169,7 +169,7 @@ class _MapaState extends State<Mapa> {
             ),
           ),
           Positioned(
-            bottom: 150,
+            bottom: 155,
             right: 20,
             child: FloatingActionButton(
               heroTag: "location_button",
@@ -179,7 +179,7 @@ class _MapaState extends State<Mapa> {
             ),
           ),
           Positioned(
-            bottom: 80,
+            bottom: 85,
             left: 20,
             child: FloatingActionButton(
               heroTag: "volver_centro",
