@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
+import 'dart:math';
 
 class Mapa extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class Mapa extends StatefulWidget {
 class _MapaState extends State<Mapa> {
   final MapController _mapController = MapController();
   Map<String, dynamic>? _selectedLocation;
+  double _rotation = 0.0;
 
   final List<Map<String, dynamic>> locations = [
     {
@@ -33,6 +35,7 @@ class _MapaState extends State<Mapa> {
       "enlace": "https://teliportme.com/virtualtour/5f1f3688/2099105",
     },
   ];
+
 
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled;
@@ -62,6 +65,7 @@ class _MapaState extends State<Mapa> {
     _mapController.move(LatLng(position.latitude, position.longitude), 17.0);
   }
 
+
   void _openMenu() {
     Navigator.push(
       context,
@@ -79,7 +83,8 @@ class _MapaState extends State<Mapa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("UBICACIONES", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        title: Text("UBICACIONES",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: Colors.black,
         centerTitle: true,
       ),
@@ -90,10 +95,21 @@ class _MapaState extends State<Mapa> {
             options: MapOptions(
               initialCenter: LatLng(37.97391, -4.10463),
               initialZoom: 20.0,
+              onMapReady: () {
+                // Inicializa _rotation cuando el mapa esté listo.  Importante.
+                _rotation = _mapController.camera.rotation;
+              },
+              onMapEvent: (MapEvent event) {
+                // Usamos event.camera.rotation directamente.
+                setState(() {
+                  _rotation = event.camera.rotation;
+                });
+              },
             ),
             children: [
               TileLayer(
-                urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                urlTemplate:
+                    "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
                 retinaMode: true,
               ),
               MarkerLayer(
@@ -108,7 +124,11 @@ class _MapaState extends State<Mapa> {
                           _selectedLocation = location;
                         });
                       },
-                      child: Icon(Icons.location_pin, color: Color(0xffd6a469), size: 30),
+                      child: Transform.rotate(
+                        angle: -_rotation * (pi / 180),
+                        child: Icon(Icons.location_pin,
+                            color: Color(0xffd6a469), size: 30),
+                      ),
                     ),
                   );
                 }).toList(),
@@ -147,7 +167,10 @@ class _MapaState extends State<Mapa> {
                       Expanded(
                         child: Text(
                           _selectedLocation!["nombre"],
-                          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -162,10 +185,7 @@ class _MapaState extends State<Mapa> {
               heroTag: "menu_button",
               onPressed: _openMenu,
               backgroundColor: Color(0xffd6a469),
-              child: Icon(
-                Icons.menu,
-                color: Colors.black
-              ),
+              child: Icon(Icons.menu, color: Colors.black),
             ),
           ),
           Positioned(
@@ -204,7 +224,8 @@ class MenuPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xff15181e),
       appBar: AppBar(
-        title: Text("Ubicaciones", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        title: Text("Ubicaciones",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: Colors.black,
         centerTitle: true,
         leading: Container(),
@@ -220,22 +241,23 @@ class MenuPage extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(vertical: 10),
               title: Text(
                 location["nombre"],
-                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                trailing: Image.asset(
-                  location["imagen"],
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
-                ),
-                onTap: () async {
-                  final Uri uri = Uri.parse(location["enlace"]);
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri);
-                  }
-                }
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.white),
               ),
-            );
+              trailing: Image.asset(
+                location["imagen"],
+                width: 50,
+                height: 50,
+                fit: BoxFit.cover,
+              ),
+              onTap: () async {
+                final Uri uri = Uri.parse(location["enlace"]);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri);
+                }
+              },
+            ),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
