@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/castillo.dart';
 import 'package:flutter_application_2/colecciones.dart';
-import 'package:flutter_application_2/iframe.dart';
+import 'package:flutter_application_2/webview.dart';
 import 'package:flutter_application_2/principal.dart';
 import 'package:flutter_application_2/refugio.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -95,7 +95,7 @@ class _TabsState extends State<Tabs> {
       case 4:
         return Castillo();
       case 5:
-        return WebAppView(url: 'https://360.amuraone.com/virtualtour/5f1f3688');
+        return WebViewPage(url: 'https://360.amuraone.com/virtualtour/5f1f3688');
       default:
       return const Center();
     }
