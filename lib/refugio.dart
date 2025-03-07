@@ -3,7 +3,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 class Refugio extends StatefulWidget {
   Refugio({super.key});
 
@@ -169,13 +168,11 @@ class GuideCard extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            CachedNetworkImage( // Usar CachedNetworkImage aquí
-              imageUrl: imagePath, // Ruta de la imagen
+            Image.asset(
+              imagePath,
               width: double.infinity,
               height: isMobile() ? 150 : 300,
               fit: BoxFit.cover,
-              placeholder: (context, url) => Center(child: CircularProgressIndicator()), // Opcional: muestra un indicador de carga
-              errorWidget: (context, url, error) => Icon(Icons.error), // Opcional: muestra un icono de error
             ),
             Container(
               width: double.infinity,
